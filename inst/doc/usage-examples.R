@@ -1,19 +1,19 @@
 ## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
   comment = "#>"
 )
 
-## ----setup--------------------------------------------------------------------
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+## ----minimal example duration, warning = FALSE, message = FALSE---------------
 library(bistablehistory)
 
-## ----minimal example duration-------------------------------------------------
 data(br_singleblock)
 gamma_fit <- fit_cumhist(br_singleblock,
-                        state="State",
-                        duration="Duration",
-                        refresh=0)
+                         state="State",
+                         duration="Duration",
+                         refresh=0)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  gamma_fit <- fit_cumhist(br_singleblock,
@@ -25,6 +25,13 @@ history_tau(gamma_fit)
 
 ## -----------------------------------------------------------------------------
 historyef(gamma_fit)
+
+## ----eval=FALSE---------------------------------------------------------------
+#  gamma_fit <- fit_cumhist(br_singleblock,
+#                          state="State",
+#                          duration="Duration",
+#                          control=list(max_treedepth = 15,
+#                                       adapt_delta = 0.99))
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  gamma_fit <- fit_cumhist(br_single_subject,

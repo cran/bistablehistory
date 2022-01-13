@@ -20,6 +20,9 @@
 #' @examples
 #' evaluate_history_option("tau", 1, 1, Inf)
 evaluate_history_option <- function(param_name, param_value, randomN, upperLimit){
+  # multiple param_value values are not allowed
+  if (!is.null(param_value) & length(param_value) != 1) stop(sprintf("Multiple values for %s", param_name))
+
   # if there is only a single cluster, both "random" and "1|random" make no sense
   if (!is.null(param_value) && param_value %in% c("random", "1|random") && randomN == 1) param_value <- NULL
 
@@ -34,49 +37,51 @@ evaluate_history_option <- function(param_name, param_value, randomN, upperLimit
     param_list[[paste0(param_name, "_sigma_size")]] <- 0L
     param_list[[paste0(param_name, "_rnd_size")]] <- 0L
   }
-  else if (is.numeric(param_value) && is.atomic(param_value) && length(param_value) == 1) {
-    if (any(param_value < 0)) stop(sprintf("%s must be non-negative", param_name))
-    if (any(param_value > upperLimit)) stop(sprintf("%s must be less or equal to %g", param_name, upperLimit))
-
-
-    # constant
-    param_list[[paste0(param_name, "_option")]] <- 1L
-    param_list[[paste0("fixed_", param_name)]] <- param_value
-
-    # no parameter is sampled
-    param_list[[paste0(param_name, "_mu_size")]] <- 0L
-    param_list[[paste0(param_name, "_sigma_size")]] <- 0L
-    param_list[[paste0(param_name, "_rnd_size")]] <- 0L
-  }
-  else if (param_value == "random") {
-    param_list[[paste0(param_name, "_option")]] <- 3L # independent random
-    param_list[[paste0("fixed_", param_name)]] <- 0 # not-used
-
-    # only random values are indenedently sampled
-    param_list[[paste0(param_name, "_mu_size")]] <- 0L
-    param_list[[paste0(param_name, "_sigma_size")]] <- 0L
-    param_list[[paste0(param_name, "_rnd_size")]] <- randomN
-  }
-  else if (param_value == "1|random") {
-    param_list[[paste0(param_name, "_option")]] <- 4L # pooled random
-    param_list[[paste0("fixed_", param_name)]] <- 0 # not-used
-
-    # all parameters are sampled for pooled random values
-    param_list[[paste0(param_name, "_mu_size")]] <- 1L
-    param_list[[paste0(param_name, "_sigma_size")]] <- 1L
-    param_list[[paste0(param_name, "_rnd_size")]] <- randomN
-  }
   else {
-    stop(sprintf("Unknown option for %s", param_name))
-  }
+    if (length(param_value) != 1) stop(sprintf("Multiple values for %s", param_name))
+    if (is.numeric(param_value) && is.atomic(param_value)) {
+      if (any(param_value < 0)) stop(sprintf("%s must be non-negative", param_name))
+      if (any(param_value > upperLimit)) stop(sprintf("%s must be less or equal to %g", param_name, upperLimit))
 
+
+      # constant
+      param_list[[paste0(param_name, "_option")]] <- 1L
+      param_list[[paste0("fixed_", param_name)]] <- param_value
+
+      # no parameter is sampled
+      param_list[[paste0(param_name, "_mu_size")]] <- 0L
+      param_list[[paste0(param_name, "_sigma_size")]] <- 0L
+      param_list[[paste0(param_name, "_rnd_size")]] <- 0L
+    }
+    else if (param_value == "random") {
+      param_list[[paste0(param_name, "_option")]] <- 3L # independent random
+      param_list[[paste0("fixed_", param_name)]] <- 0 # not-used
+
+      # only random values are indenedently sampled
+      param_list[[paste0(param_name, "_mu_size")]] <- 0L
+      param_list[[paste0(param_name, "_sigma_size")]] <- 0L
+      param_list[[paste0(param_name, "_rnd_size")]] <- randomN
+    }
+    else if (param_value == "1|random") {
+      param_list[[paste0(param_name, "_option")]] <- 4L # pooled random
+      param_list[[paste0("fixed_", param_name)]] <- 0 # not-used
+
+      # all parameters are sampled for pooled random values
+      param_list[[paste0(param_name, "_mu_size")]] <- 1L
+      param_list[[paste0(param_name, "_sigma_size")]] <- 1L
+      param_list[[paste0(param_name, "_rnd_size")]] <- randomN
+    }
+    else {
+      stop(sprintf("Unknown option for %s", param_name))
+    }
+  }
   param_list
 }
 
 
 #' Evaluates validity of initial history values.
 #'
-#' Checkes number and range of values. If a scalar is passed, uses same value
+#' Checks number and range of values. If a scalar is passed, uses same value
 #' for both states.
 #'
 #' @param history_init Either a single value or a pair of values within 0..1 range.

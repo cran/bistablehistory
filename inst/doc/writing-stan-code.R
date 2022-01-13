@@ -27,8 +27,7 @@ knitr::opts_chunk$set(
 #  
 #    # history parameters, all fixed to default values
 #    history_starting_values = c(0, 0),
-#    mixed_state = 0.5,
-#    history_mix = 0.2
+#    mixed_state = 0.5
 #  )
 
 ## ----eval=FALSE---------------------------------------------------------------
