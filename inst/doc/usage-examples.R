@@ -47,7 +47,16 @@ historyef(gamma_fit)
 #                            run="Block")
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  H <- extract_history(gam_fit)
+#  predictions <- predict(gam_fit, summary = TRUE, probs = c((1-0.89)/2, 1 - (1-0.89)/2))
+
+## ----eval=FALSE---------------------------------------------------------------
+#  prediction_samples <- predict(gam_fit, summary = FALSE, full_length = TRUE)
+
+## ----eval=FALSE---------------------------------------------------------------
+#  prediction_samples <- predict(gam_fit, summary = FALSE, full_length = FALSE)
+
+## ----eval=FALSE---------------------------------------------------------------
+#  H <- predict_history(gam_fit, "difference")
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  df <- compute_history(br_singleblock,
