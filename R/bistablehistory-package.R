@@ -1,3 +1,4 @@
+## usethis namespace: start
 #' Cumulative History Analysis for Bistable Perception Time Series
 #'
 #' @description Estimates cumulative history for time-series for continuously
@@ -29,4 +30,5 @@
 #' @references
 #' Stan Development Team (2020). RStan: the R interface to Stan. R package version 2.21.2. https://mc-stan.org
 #'
-NULL
+## usethis namespace: end
+"_PACKAGE"

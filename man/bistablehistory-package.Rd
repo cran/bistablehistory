@@ -3,6 +3,7 @@
 \docType{package}
 \name{bistablehistory-package}
 \alias{bistablehistory-package}
+\alias{_PACKAGE}
 \alias{bistablehistory}
 \title{Cumulative History Analysis for Bistable Perception Time Series}
 \description{
@@ -22,4 +23,8 @@ Stan Development Team (2020). RStan: the R interface to Stan. R package version 
 \code{vignette("cumulative-history", package = "bistablehistory")}
 \code{vignette("usage-examples", package = "bistablehistory")}
 \code{vignette("writing-stan-code", package = "bistablehistory")}
+}
+\author{
+\strong{Maintainer}: Alexander Pastukhov \email{pastukhov.alexander@gmail.com} (\href{https://orcid.org/0000-0002-8738-8591}{ORCID})
+
 }
