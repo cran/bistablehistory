@@ -3,7 +3,6 @@
 \docType{package}
 \name{bistablehistory-package}
 \alias{bistablehistory-package}
-\alias{_PACKAGE}
 \alias{bistablehistory}
 \title{Cumulative History Analysis for Bistable Perception Time Series}
 \description{

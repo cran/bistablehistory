@@ -17,7 +17,7 @@ A named list, see \code{\link[loo:waic]{loo::waic()}} for details.
 }
 \description{
 Computes widely applicable information criterion
-via \link[=loo-package]{loo} library. It can be used for a model comparison via
+via \link[loo:loo-package]{loo} library. It can be used for a model comparison via
 \link[loo:loo_compare]{loo::loo_compare()} function.
 }
 \examples{
