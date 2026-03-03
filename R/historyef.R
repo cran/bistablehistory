@@ -10,7 +10,7 @@
 #'
 #' @return data.frame with values or summary
 #'
-#' @importFrom dplyr %>% group_by summarise ungroup mutate select left_join
+#' @importFrom dplyr group_by summarise ungroup mutate select left_join
 #' @importFrom rlang .data
 #' @importFrom rstan extract
 #' @importFrom stats quantile
@@ -37,7 +37,7 @@ historyef <- function(object, summary=TRUE, probs=c(0.055, 0.945)){
 
   terms <-
     tibble::tibble(Estimate = c(bH),
-                   DistributionParameter = rep(1:ncol(bH), each=nrow(bH))) %>%
+                   DistributionParameter = rep(1:ncol(bH), each=nrow(bH))) |>
 
     # adding distribution parameter names
     dplyr::mutate(DistributionParameter = factor(.data$DistributionParameter,
@@ -48,18 +48,18 @@ historyef <- function(object, summary=TRUE, probs=c(0.055, 0.945)){
 
   # mean
   avg_terms <-
-    terms %>%
-    dplyr::group_by(.data$DistributionParameter) %>%
+    terms |>
+    dplyr::group_by(.data$DistributionParameter) |>
     dplyr::summarise(Estimate = mean(.data$Estimate), .groups="drop")
 
   # quantiles
   if (!is.null(probs)){
     term_quantiles <-
-      terms %>%
-      dplyr::group_by(.data$DistributionParameter) %>%
-      tidyr::nest() %>%
-      dplyr::mutate(CI = purrr::map(.data$data, ~tibble::as_tibble(t(apply(as.matrix(.$Estimate), MARGIN=2, FUN=quantile, probs=probs))))) %>%
-      dplyr::select(-data) %>%
+      terms |>
+      dplyr::group_by(.data$DistributionParameter) |>
+      tidyr::nest() |>
+      dplyr::mutate(CI = purrr::map(.data$data, ~tibble::as_tibble(t(apply(as.matrix(.$Estimate), MARGIN=2, FUN=quantile, probs=probs))))) |>
+      dplyr::select(-data) |>
       tidyr::unnest(cols=.data$CI)
 
     avg_terms <- dplyr::left_join(avg_terms, term_quantiles, by="DistributionParameter")

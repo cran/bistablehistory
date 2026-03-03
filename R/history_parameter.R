@@ -11,7 +11,7 @@
 #' @return A vector, if summary was not requested. Or a tibble with a summary or if a fixed value was used.
 #'
 #' @importFrom boot inv.logit
-#' @importFrom dplyr %>% group_by summarise ungroup mutate select left_join
+#' @importFrom dplyr group_by summarise ungroup mutate select left_join
 #' @importFrom rlang .data
 #' @importFrom rstan extract
 #' @importFrom stats quantile
@@ -99,19 +99,19 @@ history_parameter <- function(object, param, summary=TRUE, probs=c(0.055, 0.945)
 
   # averages only
   avg <-
-    df %>%
-    dplyr::group_by(.data$Random) %>%
-    dplyr::summarise(Estimate = mean(.data$Estimate), .groups="keep") %>%
+    df |>
+    dplyr::group_by(.data$Random) |>
+    dplyr::summarise(Estimate = mean(.data$Estimate), .groups="keep") |>
     dplyr::ungroup()
 
   # quantiles, if requested
   if (!is.null(probs)){
     quantiles <-
-      df %>%
-      dplyr::group_by(.data$Random) %>%
-      tidyr::nest() %>%
-      dplyr::mutate(CI = purrr::map(data, ~tibble::as_tibble(t(apply(as.matrix(.$Estimate), MARGIN=2, FUN=quantile, probs=probs))))) %>%
-      dplyr::select(-data) %>%
+      df |>
+      dplyr::group_by(.data$Random) |>
+      tidyr::nest() |>
+      dplyr::mutate(CI = purrr::map(data, ~tibble::as_tibble(t(apply(as.matrix(.$Estimate), MARGIN=2, FUN=quantile, probs=probs))))) |>
+      dplyr::select(-data) |>
       tidyr::unnest(cols=.data$CI)
 
     avg <-dplyr::left_join(avg, quantiles, by="Random")

@@ -377,12 +377,11 @@ the function fits cumulative history time constant but uses default
 fixed mixed state value (<code>mixed_state = 0.5</code>) and initial
 history values (<code>history_init = 0</code>).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(bistablehistory)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">data</span>(br_singleblock)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>gamma_fit <span class="ot">&lt;-</span> <span class="fu">fit_cumhist</span>(br_singleblock,</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>                         <span class="at">state=</span><span class="st">&quot;State&quot;</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                         <span class="at">duration=</span><span class="st">&quot;Duration&quot;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>                         <span class="at">refresh=</span><span class="dv">0</span>)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(br_singleblock)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>gamma_fit <span class="ot">&lt;-</span> <span class="fu">fit_cumhist</span>(br_singleblock,</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>                         <span class="at">state=</span><span class="st">&quot;State&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>                         <span class="at">duration=</span><span class="st">&quot;Duration&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                         <span class="at">refresh=</span><span class="dv">0</span>)</span></code></pre></div>
 <p>Alternatively, you specify <em>onset</em> of individual dominance
 phases that will be used to compute their duration.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>gamma_fit <span class="ot">&lt;-</span> <span class="fu">fit_cumhist</span>(br_singleblock,</span>
@@ -394,15 +393,15 @@ phases that will be used to compute their duration.</p>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   Estimate `5.5%` `94.5%`</span></span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1    0.989  0.770    1.24</span></span></code></pre></div>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1    0.984  0.774    1.20</span></span></code></pre></div>
 <p>and main effect of history for both parameters of gamma
 distribution</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">historyef</span>(gamma_fit)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 x 4</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;   DistributionParameter Estimate `5.5%` `94.5%`</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;   &lt;fct&gt;                    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 1 shape                    1.00   0.111    1.97</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 2 scale                    0.332 -0.741    1.31</span></span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;   DistributionParameter Estimate  `5.5%` `94.5%`</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;   &lt;fct&gt;                    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 1 shape                    1.06   0.0783    2.03</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 2 scale                    0.276 -0.782     1.37</span></span></code></pre></div>
 <p>The following model is fitted for the example above, see also <a href="cumulative-history.html">companion vignette</a> for details on
 cumulative history computation. <span class="math display">\[Duration[i]
 \sim  Gamma(shape[i], rate[i]) \\

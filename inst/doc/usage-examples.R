@@ -8,7 +8,6 @@ knitr::opts_chunk$set(
 
 ## ----minimal example duration, warning = FALSE, message = FALSE---------------
 library(bistablehistory)
-
 data(br_singleblock)
 gamma_fit <- fit_cumhist(br_singleblock,
                          state="State",

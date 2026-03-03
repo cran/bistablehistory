@@ -18,3 +18,6 @@
 # bistablehistory 1.1.1
 ## Improvements
 * Posterior samples for cumulative history
+
+# bistablehistory 1.1.4
+* Refactored code due to functions depreciation.

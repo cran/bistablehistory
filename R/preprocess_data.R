@@ -48,7 +48,7 @@
 #'  \item \code{run_start} - integer, 1 for the first row of the run time-series.
 #'  }
 #'
-#' @importFrom dplyr %>% group_by ungroup mutate
+#' @importFrom dplyr group_by ungroup mutate
 #' @importFrom rlang .data
 #' @importFrom tibble tibble
 #' @export
@@ -150,35 +150,35 @@ preprocess_data <- function(data,
 
     ## --- 7. Time series preprocessing (session_tmean, which durations are used for fitting, service flags)
     df <-
-      df %>%
+      df |>
       # making sure last duration is 0 (as we won't be using it for fitting  anyhow)
-      dplyr::group_by(.data$random, .data$session, .data$run) %>%
-      dplyr::mutate(duration = ifelse(dplyr::row_number()==dplyr::n(), 0, .data$duration)) %>%
+      dplyr::group_by(.data$random, .data$session, .data$run) |>
+      dplyr::mutate(duration = ifelse(dplyr::row_number()==dplyr::n(), 0, .data$duration)) |>
 
       # computing average clear percept duration for each experimental session
-      dplyr::group_by(.data$random, .data$session) %>%
-      dplyr::mutate(session_tmean = mean(.data$duration[.data$istate<3], na.rm=TRUE)) %>%
+      dplyr::group_by(.data$random, .data$session) |>
+      dplyr::mutate(session_tmean = mean(.data$duration[.data$istate<3], na.rm=TRUE)) |>
 
       # marking out percept that will be used to fit history
       # To this end, we are ignoring
       # * any transition/mixed states (istate==3)
-      dplyr::ungroup() %>%
-      dplyr::mutate(is_used = .data$istate != 3) %>%
+      dplyr::ungroup() |>
+      dplyr::mutate(is_used = .data$istate != 3) |>
 
       # * first durations for each state (as they had no chance to be properly history dependent)
-      dplyr::group_by(.data$random, .data$session, .data$run, .data$istate) %>%
-      dplyr::mutate(is_used = ifelse(dplyr::row_number()==1, FALSE, .data$is_used)) %>%
+      dplyr::group_by(.data$random, .data$session, .data$run, .data$istate) |>
+      dplyr::mutate(is_used = ifelse(dplyr::row_number()==1, FALSE, .data$is_used)) |>
 
       # * last duration in each block (as it is not used for predictions)
-      dplyr::group_by(.data$random, .data$session, .data$run) %>%
-      dplyr::mutate(is_used = ifelse(dplyr::row_number()==dplyr::n(), FALSE, .data$is_used)) %>%
+      dplyr::group_by(.data$random, .data$session, .data$run) |>
+      dplyr::mutate(is_used = ifelse(dplyr::row_number()==dplyr::n(), FALSE, .data$is_used)) |>
 
       # replacing any NAs with zeros
-      dplyr::mutate(duration = tidyr::replace_na(.data$duration, 0)) %>%
+      dplyr::mutate(duration = tidyr::replace_na(.data$duration, 0)) |>
 
       # add time series start flag (first element for each run)
-      dplyr::group_by(.data$random, .data$session, .data$run) %>%
-      dplyr::mutate(run_start  = ifelse(dplyr::row_number()==1, 1, 0))   %>%
+      dplyr::group_by(.data$random, .data$session, .data$run) |>
+      dplyr::mutate(run_start  = ifelse(dplyr::row_number()==1, 1, 0))   |>
 
       dplyr::ungroup()
 

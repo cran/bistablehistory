@@ -76,7 +76,7 @@
 #' @param ... Additional arguments passed to [rstan::sampling()][rstan::sampling] function.
 #' @return  An object of class [cumhist][cumhist-class()]
 #'
-#' @importFrom future availableCores
+#' @importFrom parallel detectCores
 #' @importFrom rstan sampling
 #' @export
 #'
@@ -253,7 +253,7 @@ fit_cumhist <- function(data,
 
   # ----------------------------- Sampling -----------------------------
   # deciding on number of cores
-  if (is.null(cores)) cores <- future::availableCores()
+  if (is.null(cores)) cores <- parallel::detectCores()
 
   if (chains > 0) {
     cumhist$stanfit <- rstan::sampling(stanmodels$historylm,

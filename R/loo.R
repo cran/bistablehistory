@@ -8,6 +8,7 @@
 #' @return A named list, see [loo::loo()] for details.
 #'
 #' @importFrom rstan loo
+#' @importFrom parallel detectCores
 #' @method loo cumhist
 #' @export loo
 #' @export
@@ -19,5 +20,6 @@
 #' loo_gamma <- loo(gamma_fit)
 #' }
 loo.cumhist <- function(x, ...) {
-  rstan::loo(x$stanfit, cores = future::availableCores())
+  n_cores <- min(c(2, parallel::detectCores()))
+  rstan::loo(x$stanfit, cores = n_cores)
 }

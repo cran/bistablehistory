@@ -9,7 +9,7 @@
 #'
 #' @return \code{tibble} with values or summary, \code{NULL} if not fixed effects were used.
 #'
-#' @importFrom dplyr %>% group_by summarise ungroup mutate select left_join
+#' @importFrom dplyr group_by summarise ungroup mutate select left_join
 #' @importFrom rlang .data
 #' @importFrom rstan extract
 #' @importFrom stats quantile
@@ -43,20 +43,19 @@ fixef <- function(object, summary=TRUE, probs=c(0.055, 0.945)){
 
   terms <-
     # laying out ordered distribution / fixed term parameter grid
-    expand.grid(DistributionParameter=1:dim(bF)[2], Term=1:dim(bF)[3]) %>%
-    dplyr::group_by(.data$DistributionParameter, .data$Term) %>%
-    dplyr::summarise(DistributionParameter = rep(.data$DistributionParameter, dim(bF)[1]),
-              Term = rep(.data$Term, dim(bF)[1]),
-              .groups="keep") %>%
-    dplyr::ungroup() %>%
+    expand.grid(DistributionParameter=1:dim(bF)[2], Term=1:dim(bF)[3]) |>
+    dplyr::group_by(.data$DistributionParameter, .data$Term) |>
+    dplyr::reframe(DistributionParameter = rep(.data$DistributionParameter, dim(bF)[1]),
+              Term = rep(.data$Term, dim(bF)[1])) |>
+    dplyr::ungroup() |>
 
     # adding in the estimates
-    dplyr::mutate(Estimate = c(bF)) %>%
+    dplyr::mutate(Estimate = c(bF)) |>
 
     # adding fixed term names
     dplyr::mutate(Term = factor(.data$Term,
                                 levels = 1:dim(bF)[3],
-                                labels = colnames(object$data$fixed))) %>%
+                                labels = colnames(object$data$fixed))) |>
 
     # adding distribution parameter names
     dplyr::mutate(DistributionParameter = factor(.data$DistributionParameter,
@@ -67,18 +66,18 @@ fixef <- function(object, summary=TRUE, probs=c(0.055, 0.945)){
 
   # mean
   avg_terms <-
-    terms %>%
-    dplyr::group_by(.data$DistributionParameter, .data$Term) %>%
+    terms |>
+    dplyr::group_by(.data$DistributionParameter, .data$Term) |>
     dplyr::summarise(Estimate = mean(.data$Estimate), .groups="drop")
 
   # quantiles
   if (!is.null(probs)){
     term_quantiles <-
-      terms %>%
-      dplyr::group_by(.data$DistributionParameter, .data$Term) %>%
-      tidyr::nest() %>%
-      dplyr::mutate(CI = purrr::map(data, ~tibble::as_tibble(t(apply(as.matrix(.$Estimate), MARGIN=2, FUN=quantile, probs=probs))))) %>%
-      dplyr::select(-data) %>%
+      terms |>
+      dplyr::group_by(.data$DistributionParameter, .data$Term) |>
+      tidyr::nest() |>
+      dplyr::mutate(CI = purrr::map(data, ~tibble::as_tibble(t(apply(as.matrix(.$Estimate), MARGIN=2, FUN=quantile, probs=probs))))) |>
+      dplyr::select(-data) |>
       tidyr::unnest(cols=.data$CI)
 
     avg_terms <- dplyr::left_join(avg_terms, term_quantiles, by=c("DistributionParameter", "Term"))

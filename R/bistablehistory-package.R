@@ -17,7 +17,7 @@
 #' @import methods
 #' @import Rcpp
 #' @importFrom tibble tibble as_tibble
-#' @importFrom dplyr bind_cols row_number n mutate group_by ungroup summarise %>%
+#' @importFrom dplyr bind_cols row_number n mutate group_by ungroup summarise
 #' @importFrom stats coef predict quantile
 #' @importFrom utils data
 #' @importFrom rlang .data

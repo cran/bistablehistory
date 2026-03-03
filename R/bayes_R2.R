@@ -16,7 +16,7 @@
 #'
 #' @return vector of values or a data.frame with summary
 #'
-#' @importFrom dplyr %>% bind_cols
+#' @importFrom dplyr bind_cols
 #' @importFrom rlang .data
 #' @importFrom rstantools bayes_R2
 #' @importFrom stats quantile
@@ -45,6 +45,6 @@ bayes_R2.cumhist <- function(object, summary=TRUE, probs=c(0.055, 0.945), ...){
   if (is.null(probs)) return(r2_mean)
 
   # full summary
-  tibble::tibble(R2 = r2_mean) %>%
+  tibble::tibble(R2 = r2_mean) |>
     dplyr::bind_cols(tibble::as_tibble(t(apply(as.matrix(r2s), MARGIN=2, FUN=quantile, probs=probs))))
 }

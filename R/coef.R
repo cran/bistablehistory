@@ -11,7 +11,7 @@
 #'
 #' @return data.frame with values or summary
 #'
-#' @importFrom dplyr %>% mutate relocate bind_rows arrange
+#' @importFrom dplyr mutate relocate bind_rows arrange
 #' @importFrom rlang .data
 #' @export
 #'
@@ -28,14 +28,14 @@ coef.cumhist <- function(object, summary=TRUE, probs=c(0.055, 0.945), ...){
   if (is.null(object$stanfit)) stop("The object has no fitted stan model")
 
     coef <-
-      bistablehistory::historyef(object, summary, probs) %>%
-      dplyr::mutate(Term = "History") %>%
+      bistablehistory::historyef(object, summary, probs) |>
+      dplyr::mutate(Term = "History") |>
       dplyr::relocate(.data$Term, .after= .data$DistributionParameter)
 
   if (object$data$fixedN > 0) {
     coef <-
       dplyr::bind_rows(coef,
-                       bistablehistory::fixef(object, summary, probs)) %>%
+                       bistablehistory::fixef(object, summary, probs)) |>
       dplyr::arrange(.data$DistributionParameter)
 
   }
